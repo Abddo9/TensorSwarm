@@ -4,8 +4,8 @@
   <!-- * General configuration * -->
   <!-- ************************* -->
   <framework>
-    <system threads="3"/>
-    <experiment length="0" ticks_per_second="10" random_seed="124"/>
+    <system threads="0"/>
+    <experiment length="60" ticks_per_second="10" random_seed="124"/>
   </framework>
 
   <!-- *************** -->
@@ -18,7 +18,7 @@
       </actuators>
       <sensors>
         <differential_steering implementation="default"/>
-        <footbot_lidar implementation="default" show_rays="false"/>
+        <footbot_lidar implementation="default" show_rays="true"/>
       </sensors>
       <params stopWithoutSubscriberCount="10" />
     </tensor_swarm_bot_controller>

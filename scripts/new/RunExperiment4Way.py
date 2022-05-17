@@ -33,6 +33,7 @@ from ArgosMultiProcessEnvironment import ArgosMultiProcessEnvironment
 from geometry_msgs.msg import Twist, Pose2D
 import numpy as np
 def train(num_timesteps, seed):
+    print("start of training....")
     np.seterr(invalid='raise')
 
     ncpu = multiprocessing.cpu_count()

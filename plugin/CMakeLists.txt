@@ -6,13 +6,16 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 find_package(PkgConfig)
 pkg_check_modules(ARGOS REQUIRED argos3_simulator)
+
+
+
 set(ARGOS_PREFIX ${ARGOS_PREFIX} CACHE INTERNAL "")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ARGOS_PREFIX}/share/argos3/cmake)
 
-include(ARGoSCheckQTOpenGL)
+#include(ARGoSCheckQTOpenGL)
 
 find_package(GSL REQUIRED)
-find_package(Lua52 REQUIRED)
+#find_package(Lua52 REQUIRED)
 
 include_directories(${catkin_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${ARGOS_INCLUDE_DIRS} ${GSL_INCLUDE_DIR} ${LUA_INCLUDE_DIR})
 

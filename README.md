@@ -27,7 +27,7 @@ https://youtu.be/GDV5NgrER5U
 
 ### Argos 3
 
-Argos 3 must be installed from [here](https://github.com/deeplearningrobotics/argos3/commits/adding_lidar_clean). This version extends the simulation by a laser scanner which is missing in the
+Argos 3 must be installed from [here](https://github.com/Abddo9/argos3). This version extends the simulation by a laser scanner which is missing in the
 official version.
 
 ### ROS
@@ -71,8 +71,8 @@ This is a true multi agent PPO implementation which should be used by advanced u
 Note that you most likely need to start with less robots, train them and then add more robots after the models.
 
 To run this experiments execute in your catkin work space:
-1. 4-way-crossing: `src/tensorswarm/run/4_way_run_ppo.bash`
-2. L-curve: `src/tensorswarm/run/l_curve_run_ppo.bash`
+1. 4-way-crossing: `src/TensorSwarm/run/4_way_run_ppo.bash`
+2. L-curve: `src/TensorSwarm/run/L_curve_run_ppo.bash`
 
 
 ## TensorForce
@@ -81,7 +81,7 @@ As TensorForce does not support multiple agents at the moment this variant only 
 But it is well suitable for less experienced users or users who want to experiment with different deep learning algorithms other than PPO. We trained up to 4 robots
 successfully with this variant.
 To run this experiments execute in your catkin work space:
-1. 4-way-crossing: `src/tensorswarm/run/4_way_run_tforce.bash`
+1. 4-way-crossing: `src/TensorSwarm/run/4_way_run_tforce.bash`
 
 ## Starting the simulation
 
