@@ -47,12 +47,16 @@ If you want to use the Tensorforce integration you also need to install it as de
 ## TensorSwarm
 
 TensorSwarm comes as a ROS packages. So all you need to do is clone it into your catkin workspace.
-E.g: 
-mkdir ~/catkin
-mkdir ~/catkin/src
-cd ~/catkin/src
 
-git clone https://github.com/Abddo9/TensorSwarm.git 
+E.g: 
+
+`mkdir ~/catkin`
+
+`mkdir ~/catkin/src`
+
+`cd ~/catkin/src`
+
+`git clone https://github.com/Abddo9/TensorSwarm.git`
 
 # Running
 
