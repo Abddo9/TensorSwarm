@@ -39,6 +39,7 @@ ROS noetic is required which can be found [here](http://wiki.ros.org/noetic/Inst
 Note that ROS noetic supports Python 3, so do not use Python 2.
 
 `pip install tensorflow-gpu`
+
 `pip install joblib`
 
 If you want to use the Tensorforce integration you also need to install it as described [here](https://github.com/reinforceio/tensorforce)
