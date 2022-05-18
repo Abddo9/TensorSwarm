@@ -5,7 +5,7 @@ License: Copyleft
 __author__ = "Michael Gygli"
 
 import tensorflow as tf
-from StringIO import StringIO
+from io import StringIO
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -14,7 +14,7 @@ class Logger(object):
 
     def __init__(self, log_dir):
         """Creates a summary writer logging to log_dir."""
-        self.writer = tf.summary.FileWriter(log_dir)
+        self.writer = tf.compat.v1.summary.FileWriter(log_dir)
 
     def log_scalar(self, tag, value, step):
         """Log a scalar variable.

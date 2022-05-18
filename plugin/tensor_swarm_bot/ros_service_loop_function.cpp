@@ -5,6 +5,9 @@
 #include <argos3/core/control_interface/ci_controller.h>
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 
+/* Function definitions for logging */
+//#include <argos3/core/utility/logging/argos_log.h>
+
 #include <sys/file.h>
 #include <errno.h>
 
@@ -45,6 +48,7 @@ ROSServiceLoopFunction::ROSServiceLoopFunction() : m_service_data_available(fals
   ros::init(argc, &argv, name);
 
   m_ros_thread = std::thread([this, name]() {
+    std::cout << "inside the thread" << std::endl;
     ros::NodeHandle n;
     auto service =
             n.advertiseService<tensorswarm::AIServiceRequest, tensorswarm::AIServiceResponse>
@@ -54,8 +58,10 @@ ROSServiceLoopFunction::ROSServiceLoopFunction() : m_service_data_available(fals
                              this,
                              std::placeholders::_1,
                              std::placeholders::_2));
+    std::cout << "second check in thread " << std::endl;
     ros::spin();
   });
+
 }
 
 void ROSServiceLoopFunction::Init(argos::TConfigurationNode &t_tree) {
@@ -68,6 +74,7 @@ void ROSServiceLoopFunction::Reset() {
 
 bool ROSServiceLoopFunction::ServiceFunction(const tensorswarm::AIServiceRequest &req,
                                              tensorswarm::AIServiceResponse &resp) {
+  //std::cout << "service function called " << std::endl;
   std::unique_lock<std::mutex> lk(m_m_main);
   m_req_store = req;
   m_service_data_available = true;
@@ -81,10 +88,12 @@ bool ROSServiceLoopFunction::ServiceFunction(const tensorswarm::AIServiceRequest
   m_loop_done = false;
   m_resp_store = tensorswarm::AIServiceResponse();
   lk.unlock();
+  //std::cout << "service function ended" << std::endl;
   return true;
 }
 
 void ROSServiceLoopFunction::PreStep() {
+  LOG << "prestep called " << std::endl;
   m_lk = std::unique_lock<std::mutex>(m_m_main);
 
   while (!m_service_data_available) {
@@ -143,10 +152,11 @@ void ROSServiceLoopFunction::PreStep() {
     }
     ++i;
   }
+  LOG << "prestep ended " << std::endl;
 }
 
 void ROSServiceLoopFunction::PostStep() {
-
+  LOG << "psot step called " << std::endl;
   using namespace argos;
   auto robots_map = GetSpace().GetEntitiesByType("foot-bot");
   auto counter = 0;
@@ -242,7 +252,7 @@ void ROSServiceLoopFunction::PostStep() {
   m_loop_done = true;
   m_lk.unlock();
   m_cv_service.notify_one();
-
+  LOG << "post step ended " << std::endl;
 }
 
 REGISTER_LOOP_FUNCTIONS(ROSServiceLoopFunction, "ROSServiceLoopFunction")

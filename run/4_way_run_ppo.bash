@@ -9,4 +9,4 @@ argos3 -c src/TensorSwarm/argos_worlds/4_way.argos &
 argos3 -c src/TensorSwarm/argos_worlds/4_way.argos &
 argos3 -c src/TensorSwarm/argos_worlds/4_way.argos &
 
-python src/TensorSwarm/scripts/new/RunExperiment4Way.py
+python3 src/TensorSwarm/scripts/new/RunExperiment4Way.py

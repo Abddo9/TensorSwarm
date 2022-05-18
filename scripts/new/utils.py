@@ -73,18 +73,18 @@ def conv(x, scope, nf, rf, stride, pad='VALID', init_scale=1.0, data_format='NHW
     bias_var_shape = [nf] if one_dim_bias else [1, nf, 1, 1]
     nin = x.get_shape()[channel_ax].value
     wshape = [rf, rf, nin, nf]
-    with tf.variable_scope(scope):
-        w = tf.get_variable("w", wshape, initializer=ortho_init(init_scale))
-        b = tf.get_variable("b", bias_var_shape, initializer=tf.constant_initializer(0.0))
+    with tf.compat.v1.variable_scope(scope):
+        w = tf.compat.v1.get_variable("w", wshape, initializer=ortho_init(init_scale))
+        b = tf.compat.v1.get_variable("b", bias_var_shape, initializer=tf.constant_initializer(0.0))
         if not one_dim_bias and data_format == 'NHWC':
             b = tf.reshape(b, bshape)
         return b + tf.nn.conv2d(x, w, strides=strides, padding=pad, data_format=data_format)
 
 def fc(x, scope, nh, init_scale=1.0, init_bias=0.0):
-    with tf.variable_scope(scope):
-        nin = x.get_shape()[1].value
-        w = tf.get_variable("w", [nin, nh], initializer=ortho_init(init_scale))
-        b = tf.get_variable("b", [nh], initializer=tf.constant_initializer(init_bias))
+    with tf.compat.v1.variable_scope(scope):
+        nin = x.get_shape()[1]
+        w = tf.compat.v1.get_variable("w", [nin, nh], initializer=ortho_init(init_scale))
+        b = tf.compat.v1.get_variable("b", [nh], initializer=tf.constant_initializer(init_bias))
         return tf.matmul(x, w)+b
 
 def batch_to_seq(h, nbatch, nsteps, flat=False):
@@ -106,10 +106,10 @@ def seq_to_batch(h, flat = False):
 def lstm(xs, ms, s, scope, nh, init_scale=1.0):
     nbatch, nin = [v.value for v in xs[0].get_shape()]
     nsteps = len(xs)
-    with tf.variable_scope(scope):
-        wx = tf.get_variable("wx", [nin, nh*4], initializer=ortho_init(init_scale))
-        wh = tf.get_variable("wh", [nh, nh*4], initializer=ortho_init(init_scale))
-        b = tf.get_variable("b", [nh*4], initializer=tf.constant_initializer(0.0))
+    with tf.compat.v1.variable_scope(scope):
+        wx = tf.compat.v1.get_variable("wx", [nin, nh*4], initializer=ortho_init(init_scale))
+        wh = tf.compat.v1.get_variable("wh", [nh, nh*4], initializer=ortho_init(init_scale))
+        b = tf.compat.v1.get_variable("b", [nh*4], initializer=tf.constant_initializer(0.0))
 
     c, h = tf.split(axis=1, num_or_size_splits=2, value=s)
     for idx, (x, m) in enumerate(zip(xs, ms)):
@@ -136,19 +136,19 @@ def _ln(x, g, b, e=1e-5, axes=[1]):
 def lnlstm(xs, ms, s, scope, nh, init_scale=1.0):
     nbatch, nin = [v.value for v in xs[0].get_shape()]
     nsteps = len(xs)
-    with tf.variable_scope(scope):
-        wx = tf.get_variable("wx", [nin, nh*4], initializer=ortho_init(init_scale))
-        gx = tf.get_variable("gx", [nh*4], initializer=tf.constant_initializer(1.0))
-        bx = tf.get_variable("bx", [nh*4], initializer=tf.constant_initializer(0.0))
+    with tf.compat.v1.variable_scope(scope):
+        wx = tf.compat.v1.get_variable("wx", [nin, nh*4], initializer=ortho_init(init_scale))
+        gx = tf.compat.v1.get_variable("gx", [nh*4], initializer=tf.constant_initializer(1.0))
+        bx = tf.compat.v1.get_variable("bx", [nh*4], initializer=tf.constant_initializer(0.0))
 
-        wh = tf.get_variable("wh", [nh, nh*4], initializer=ortho_init(init_scale))
-        gh = tf.get_variable("gh", [nh*4], initializer=tf.constant_initializer(1.0))
-        bh = tf.get_variable("bh", [nh*4], initializer=tf.constant_initializer(0.0))
+        wh = tf.compat.v1.get_variable("wh", [nh, nh*4], initializer=ortho_init(init_scale))
+        gh = tf.compat.v1.get_variable("gh", [nh*4], initializer=tf.constant_initializer(1.0))
+        bh = tf.compat.v1.get_variable("bh", [nh*4], initializer=tf.constant_initializer(0.0))
 
-        b = tf.get_variable("b", [nh*4], initializer=tf.constant_initializer(0.0))
+        b = tf.compat.v1.get_variable("b", [nh*4], initializer=tf.constant_initializer(0.0))
 
-        gc = tf.get_variable("gc", [nh], initializer=tf.constant_initializer(1.0))
-        bc = tf.get_variable("bc", [nh], initializer=tf.constant_initializer(0.0))
+        gc = tf.compat.v1.get_variable("gc", [nh], initializer=tf.constant_initializer(1.0))
+        bc = tf.compat.v1.get_variable("bc", [nh], initializer=tf.constant_initializer(0.0))
 
     c, h = tf.split(axis=1, num_or_size_splits=2, value=s)
     for idx, (x, m) in enumerate(zip(xs, ms)):
@@ -180,7 +180,7 @@ def discount_with_dones(rewards, dones, gamma):
     return discounted[::-1]
 
 def find_trainable_variables(key):
-    with tf.variable_scope(key):
+    with tf.compat.v1.variable_scope(key):
         return tf.trainable_variables()
 
 def make_path(f):

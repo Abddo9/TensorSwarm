@@ -37,15 +37,15 @@ def train(num_timesteps, seed):
     np.seterr(invalid='raise')
 
     ncpu = multiprocessing.cpu_count()
-    config = tf.ConfigProto(allow_soft_placement=False,
+    config = tf.compat.v1.ConfigProto(allow_soft_placement=False,
                             intra_op_parallelism_threads=ncpu,
                             inter_op_parallelism_threads=ncpu,
                             device_count={'GPU': 0})
-    config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
+    config.graph_options.optimizer_options.global_jit_level = tf.compat.v1.OptimizerOptions.ON_1
 
     logger.configure("/tmp/tf_models/")
 
-    tf.Session(config=config).__enter__()
+    tf.compat.v1.Session(config=config).__enter__()
 
     start_poses = list()
 

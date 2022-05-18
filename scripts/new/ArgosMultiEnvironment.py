@@ -195,7 +195,7 @@ class ArgosEnvironment(gym.Env):
                     # If we got an exception we abort the trajectory, as the simulation might be in an inconstant state.
                     response.done = [True] * self.num_robots
             except Exception as e:
-                print "Serice call failed. Trying again in 3 seconds: " + str(e)
+                print ("Serice call failed. Trying again in 3 seconds: " + str(e))
                 service_exception = True
                 time.sleep(3)
 
@@ -216,7 +216,7 @@ class ArgosEnvironment(gym.Env):
                 response = self.service(list(), self.start_poses, self.goal_poses)
                 service_success = True
             except Exception as e:
-                print "Service call failed. Trying again in 3 seconds: " + str(e)
+                print ("Service call failed. Trying again in 3 seconds: " + str(e))
                 time.sleep(3)
 
         self.current_response = response

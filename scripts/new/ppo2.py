@@ -28,7 +28,7 @@ import os.path as osp
 import tensorflow as tf
 from collections import deque
 import logger
-from numba import jit
+#from numba import jit
 
 class AbstractEnvRunner(object):
     def __init__(self, env, model, nsteps):
@@ -46,18 +46,18 @@ class AbstractEnvRunner(object):
 class Model(object):
     def __init__(self, policy, ob_space, ac_space, nbatch_act, nbatch_train,
                  nsteps, ent_coef, vf_coef, max_grad_norm, deterministic=False):
-        sess = tf.get_default_session()
+        sess = tf.compat.v1.get_default_session()
 
         act_model = policy(sess, ob_space, ac_space, nbatch_act, 1, reuse=False, deterministic=deterministic)
         train_model = policy(sess, ob_space, ac_space, nbatch_train, nsteps, reuse=True, deterministic=deterministic)
 
         A = train_model.pdtype.sample_placeholder([None])
-        ADV = tf.placeholder(tf.float32, [None])
-        R = tf.placeholder(tf.float32, [None])
-        OLDNEGLOGPAC = tf.placeholder(tf.float32, [None])
-        OLDVPRED = tf.placeholder(tf.float32, [None])
-        LR = tf.placeholder(tf.float32, [])
-        CLIPRANGE = tf.placeholder(tf.float32, [])
+        ADV = tf.compat.v1.placeholder(tf.float32, [None])
+        R = tf.compat.v1.placeholder(tf.float32, [None])
+        OLDNEGLOGPAC = tf.compat.v1.placeholder(tf.float32, [None])
+        OLDVPRED = tf.compat.v1.placeholder(tf.float32, [None])
+        LR = tf.compat.v1.placeholder(tf.float32, [])
+        CLIPRANGE = tf.compat.v1.placeholder(tf.float32, [])
 
         neglogpac = train_model.pd.neglogp(A)
         entropy = tf.reduce_mean(train_model.pd.entropy())
@@ -72,15 +72,15 @@ class Model(object):
         pg_losses2 = -ADV * tf.clip_by_value(ratio, 1.0 - CLIPRANGE, 1.0 + CLIPRANGE)
         pg_loss = tf.reduce_mean(tf.maximum(pg_losses, pg_losses2))
         approxkl = .5 * tf.reduce_mean(tf.square(neglogpac - OLDNEGLOGPAC))
-        clipfrac = tf.reduce_mean(tf.to_float(tf.greater(tf.abs(ratio - 1.0), CLIPRANGE)))
+        clipfrac = tf.reduce_mean(tf.compat.v1.to_float(tf.greater(tf.abs(ratio - 1.0), CLIPRANGE)))
         loss = pg_loss - entropy * ent_coef + vf_loss * vf_coef
-        with tf.variable_scope('model'):
-            params = tf.trainable_variables()
+        with tf.compat.v1.variable_scope('model'):
+            params = tf.compat.v1.trainable_variables()
         grads = tf.gradients(loss, params)
         if max_grad_norm is not None:
             grads, _grad_norm = tf.clip_by_global_norm(grads, max_grad_norm)
         grads = list(zip(grads, params))
-        trainer = tf.train.AdamOptimizer(learning_rate=LR, epsilon=1e-5)
+        trainer = tf.optimizers.Adam(learning_rate=LR, epsilon=1e-5)
         _train = trainer.apply_gradients(grads)
 
         def reshape2d(arr):
@@ -147,10 +147,10 @@ class Model(object):
         self.step = act_model.step
         self.value = act_model.value
         self.initial_state = act_model.initial_state
-        self.saver = tf.train.Saver()
+        self.saver = tf.compat.v1.train.Saver()
         self.save = save
         self.restore = restore
-        tf.global_variables_initializer().run(session=sess) #pylint: disable=E1101
+        tf.compat.v1.global_variables_initializer().run(session=sess) #pylint: disable=E1101
 
 class Runner(AbstractEnvRunner):
 

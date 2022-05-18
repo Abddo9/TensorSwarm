@@ -32,13 +32,14 @@ official version.
 
 ### ROS
 
-ROS Kinetic is required which can be found [here](http://wiki.ros.org/kinetic/Installation)
+ROS noetic is required which can be found [here](http://wiki.ros.org/noetic/Installation)
 
 ### Python Dependencies
 
-Note that ROS does not support Python 3, so all python dependencies must be installed for Python 2.
+Note that ROS noetic supports Python 3, so do not use Python 2.
 
 `pip install tensorflow-gpu`
+`pip install joblib`
 
 If you want to use the Tensorforce integration you also need to install it as described [here](https://github.com/reinforceio/tensorforce)
 

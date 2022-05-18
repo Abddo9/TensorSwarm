@@ -23,7 +23,7 @@ import time
 import numpy as np
 import rospy
 
-from tensorswarm.srv import *
+#from tensorswarm.src import *
 from geometry_msgs.msg import Twist, Pose2D
 import gym
 from gym import spaces

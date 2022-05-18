@@ -4,6 +4,10 @@
 #include <argos3/core/utility/configuration/argos_configuration.h>
 #include <argos3/core/utility/math/vector2.h>
 
+/* Function definitions for logging */
+#include <argos3/core/utility/logging/argos_log.h>
+
+
 #include "ros_helpers.h"
 
 
@@ -18,12 +22,15 @@ CTensorSwarmBot::CTensorSwarmBot() :
 {}
 
 void CTensorSwarmBot::Init(TConfigurationNode& t_node) {
+  //RLOG << "test message init" << std::endl;
   m_pcWheels = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
   m_pcWheelsSensor = GetSensor<CCI_DifferentialSteeringSensor>("differential_steering");
   m_pcLaser = GetSensor<CCI_FootBotLidarSensor>("footbot_lidar");
+  //RLOG << "test message init done" << std::endl;
 }
 
 void CTensorSwarmBot::ControlStep() {
+  RLOG << "test message " << std::endl;
   m_goal_progress_called = false;
 }
 
